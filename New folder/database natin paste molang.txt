@@ -1,0 +1,258 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: May 19, 2025 at 04:18 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `newfolder`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `featured_listings`
+--
+
+CREATE TABLE `featured_listings` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `bedrooms` int(11) NOT NULL,
+  `bathrooms` int(11) NOT NULL,
+  `area` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `image` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `images`
+--
+
+CREATE TABLE `images` (
+  `id` int(11) NOT NULL,
+  `file` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `listing_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('pending','accepted','declined') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `listing_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('accepted','declined') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `role` enum('user','admin') DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_listings`
+--
+
+CREATE TABLE `user_listings` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `bedrooms` int(11) NOT NULL,
+  `bathrooms` int(11) NOT NULL,
+  `area` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` enum('pending','accepted','declined') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_transactions`
+--
+
+CREATE TABLE `user_transactions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `listing_id` int(11) NOT NULL,
+  `reservation_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `featured_listings`
+--
+ALTER TABLE `featured_listings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `listing_id` (`listing_id`);
+
+--
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `listing_id` (`listing_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `user_listings`
+--
+ALTER TABLE `user_listings`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `user_transactions`
+--
+ALTER TABLE `user_transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `featured_listings`
+--
+ALTER TABLE `featured_listings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `reservations`
+--
+ALTER TABLE `reservations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `user_listings`
+--
+ALTER TABLE `user_listings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_transactions`
+--
+ALTER TABLE `user_transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `featured_listings` (`id`);
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `featured_listings` (`id`);
+
+--
+-- Constraints for table `user_listings`
+--
+ALTER TABLE `user_listings`
+  ADD CONSTRAINT `user_listings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
